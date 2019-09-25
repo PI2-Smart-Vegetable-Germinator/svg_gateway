@@ -1,0 +1,15 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5002:5000
+    volumes:
+      - '.:/app'
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevConfig
+      - SECRET_KEY=supersecretdevonlykey
