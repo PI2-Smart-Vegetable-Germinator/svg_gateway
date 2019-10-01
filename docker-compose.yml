@@ -8,8 +8,17 @@ services:
       - 5002:5000
     volumes:
       - '.:/app'
+    external_links:
+      - svg_monitoring_app_1:svg_monitoring
+      - svg_auth_1:svg_auth
     environment:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevConfig
       - SECRET_KEY=supersecretdevonlykey
+      - SVG_MONITORING_BASE_URI=svg_monitoring:5001
+      - SVG_AUTH_BASE_URI=svg_auth:5000
+networks:
+  svg_shared:
+    external:
+      name: svg_shared
