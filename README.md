@@ -27,3 +27,18 @@ Uma requisição pode ser construída da seguinte forma:
 
   response = requests.get("%s/endpoint" % os.getenv('SVG_AUTH_BASE_URI'))
 ```
+
+### Autenticando requisições
+Para garantir apenas acesso autenticado a um endpoint qualquer, usamos o decorator `@jwt_required` do `flask_jwt_extended`. Para obter o id do usuário que fez a requisição, usamos a função `get_jwt_identity`, do mesmo pacote. Um exemplo:
+
+```python
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+
+@some_blueprint.route('/api/route', methods=['GET'])
+@jwt_required
+def auth_only_route():
+    user_id = get_jwt_identity()
+    do_something(user_id)
+    ...
+```
