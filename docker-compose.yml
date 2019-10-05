@@ -16,7 +16,7 @@ services:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevConfig
       - SECRET_KEY=supersecretdevonlykey
-      - SVG_MONITORING_BASE_URI=http://svg_monitoring:5001
+      - SVG_MONITORING_BASE_URI=http://svg_monitoring:5000
       - SVG_AUTH_BASE_URI=http://svg_auth:5000
     networks:
       - svg_shared

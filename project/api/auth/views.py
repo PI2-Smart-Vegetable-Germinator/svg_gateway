@@ -21,3 +21,11 @@ def auth_ping():
     response = requests.get('%s/api/ping' % os.getenv('SVG_AUTH_BASE_URI'))
 
     return jsonify(response.json()), 200
+    
+
+@auth_blueprint.route('/api/planting-time/', methods=['GET'])
+def get_planting_time():
+    response = requests.get('%s/api/planting-time' % os.getenv('SVG_MONITORING_BASE_URI'))
+
+    return jsonify(response.json()), 200
+
