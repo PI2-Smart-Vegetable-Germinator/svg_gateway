@@ -7,6 +7,6 @@ def generate_auth_tokens(user_id):
     refresh_token = create_refresh_token(identity=user_id)
 
     return {
-        'access_token': access_token,
-        'refresh_token': refresh_token,
+        'accessToken': access_token,
+        'refreshToken': refresh_token,
     }
