@@ -3,7 +3,7 @@ import os
 
 class BaseConfig:
     TESTING = False
-    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(days=1)
+    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(days=500)
 
 
 class DevConfig(BaseConfig):
