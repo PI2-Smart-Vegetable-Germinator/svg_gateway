@@ -21,7 +21,7 @@ def ping():
 
 @auth_blueprint.route('/api/auth_ping', methods=['GET'])
 def auth_ping():
-    response = requests.get('%s/api/ping' % os.getenv('SVG_AUTH_BASE_URI'))
+    response = requests.get('%s/api/ping' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'))
 
     return jsonify(response.json()), 200
     
