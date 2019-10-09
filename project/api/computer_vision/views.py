@@ -23,16 +23,24 @@ def computer_vision_submit_image():
         return jsonify({
             'response': 'Image not found!',
         }), 404
+    print('EAEEEEEEEEEEEE')
     image_file = request.files['file']
-    planting_id = request.json['planting_id']
-    response = requests.post('%s/api/submit_image' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'), json = planting_id, files = {'file': image_file})
+    post_data = json.loads(request.form['json'])
+
+    data = {
+        'file': request.files['file'],
+        'json': (None, json.dumps(post_data), 'application/json')
+    }
+    planting_id = post_data['planting_id']
+    response = requests.post('%s/api/submit_image' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'), files = data)
 
     return jsonify(response.json()), response.status_code
 
 @computer_vision_blueprint.route('/api/trigger_image_capture', methods=['POST'])
 def computer_vision_trigger_image_capture():
-    url ='http://' + '192.168.0.23' + ':5000/api/take_photo'
-    data = {'raspberry_ip': request.json['raspberry_ip'], 'planting_id' : request.json['planting_id']}
+    url ='http://' + '192.168.0.33' + ':5000/api/take_photo'
+    post_data = request.get_json()
+    data = {'raspberry_ip': post_data['raspberry_ip'], 'planting_id' : post_data['planting_id']}
     response = requests.post(url, json=data)
 
     return jsonify(response.json()), response.status_code
