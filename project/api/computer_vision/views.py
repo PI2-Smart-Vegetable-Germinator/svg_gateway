@@ -24,13 +24,15 @@ def computer_vision_submit_image():
             'response': 'Image not found!',
         }), 404
     image_file = request.files['file']
-    response = requests.post('%s/api/submit_image' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'), data = request.data, files = {'file': image_file})
+    planting_id = request.json['planting_id']
+    response = requests.post('%s/api/submit_image' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'), json = planting_id, files = {'file': image_file})
 
     return jsonify(response.json()), response.status_code
 
 @computer_vision_blueprint.route('/api/trigger_image_capture', methods=['POST'])
 def computer_vision_trigger_image_capture():
-    url ='http://' + 'localhost' + ':5000/api/take_photo'
-    response = requests.post(url, json=request)
+    url ='http://' + '192.168.0.23' + ':5000/api/take_photo'
+    data = {'raspberry_ip': request.json['raspberry_ip'], 'planting_id' : request.json['planting_id']}
+    response = requests.post(url, json=data)
 
     return jsonify(response.json()), response.status_code
