@@ -36,6 +36,13 @@ def get_planting_time():
     return jsonify(response.json()), 200
 
 
+@auth_blueprint.route('/api/current-info', methods=['GET'])
+def get_current_info():
+    response = requests.get('%s/api/current-info' % os.getenv('SVG_MONITORING_BASE_URI'), json=request.get_json())
+
+    return jsonify(response.json()), 200
+
+
 @auth_blueprint.route('/api/signup', methods=['POST'])
 def signup():
     response = requests.post('%s/api/signup' % os.getenv('SVG_AUTH_BASE_URI'), json=request.get_json())
