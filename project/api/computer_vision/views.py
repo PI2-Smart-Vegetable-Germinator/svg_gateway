@@ -23,7 +23,6 @@ def computer_vision_submit_image():
         return jsonify({
             'response': 'Image not found!',
         }), 404
-    print('EAEEEEEEEEEEEE')
     image_file = request.files['file']
     post_data = json.loads(request.form['json'])
 
@@ -38,7 +37,7 @@ def computer_vision_submit_image():
 
 @computer_vision_blueprint.route('/api/trigger_image_capture', methods=['POST'])
 def computer_vision_trigger_image_capture():
-    url ='http://' + '192.168.0.33' + ':5000/api/take_photo'
+    url ='http://' + '192.168.0.23' + ':5000/api/take_photo'
     post_data = request.get_json()
     data = {'raspberry_ip': post_data['raspberry_ip'], 'planting_id' : post_data['planting_id']}
     response = requests.post(url, json=data)
