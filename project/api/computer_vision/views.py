@@ -31,7 +31,6 @@ def computer_vision_submit_image():
         'json': (None, json.dumps(post_data), 'application/json')
     }
     planting_id = post_data['planting_id']
-    print('[SUBMIT IMAGE]')
     response = requests.post('%s/api/submit_image' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'), files = data)
     return jsonify(response.json()), response.status_code
 
@@ -49,7 +48,6 @@ def computer_vision_process_image_data():
         'json': (None, json.dumps(post_data), 'application/json')
     }
     planting_id = post_data['planting_id']
-    print('[PROCESS IMAGE DATA]')
     response = requests.post('%s/api/process_image_data' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'), files = data)
     return jsonify(response.json()), response.status_code
 
@@ -70,6 +68,8 @@ def computer_image_processing_results():
         'green_percentage'   : post_data['green_percentage'],
         'sprouted_seedlings' : post_data['sprouted_seedlings']
     }
-    response = requests.post(url, json=data)
 
+    response = requests.post('%s/api/image_processing_results' % os.getenv('SVG_MONITORING_BASE_URI'), json=data)
+
+    print(response)
     return jsonify(response.json()), response.status_code
