@@ -64,6 +64,14 @@ def login():
     return jsonify(response_data), response.status_code
 
 
+@auth_blueprint.route('/api/users', methods=['GET'])
+def users():
+    response = requests.get('%s/api/users' % os.getenv('SVG_AUTH_BASE_URI'), json=request.get_json())
+    response_data = response.json()
+
+    return jsonify(response_data), response.status_code
+
+
 @auth_blueprint.route('/api/device_id', methods=['POST'])
 @jwt_required
 def update_device_id():
