@@ -25,6 +25,9 @@ CORS(app)
 from project.api.auth.views import auth_blueprint
 app.register_blueprint(auth_blueprint)
 
+from project.api.computer_vision.views import computer_vision_blueprint
+app.register_blueprint(computer_vision_blueprint)
+
 
 @app.cli.command('test')
 def test():
