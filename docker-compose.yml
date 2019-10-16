@@ -11,6 +11,7 @@ services:
     external_links:
       - svg_monitoring_app_1:svg_monitoring
       - svg_auth_app_1:svg_auth
+      - svg_computer_vision_app_1:svg_computer_vision
     environment:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development
@@ -18,6 +19,7 @@ services:
       - SECRET_KEY=supersecretdevonlykey
       - SVG_MONITORING_BASE_URI=http://svg_monitoring:5000
       - SVG_AUTH_BASE_URI=http://svg_auth:5000
+      - SVG_COMPUTER_VISION_BASE_URI=http://svg_computer_vision:5000
     networks:
       - svg_shared
 networks:

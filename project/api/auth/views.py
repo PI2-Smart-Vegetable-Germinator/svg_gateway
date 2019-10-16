@@ -24,7 +24,7 @@ def ping():
 
 @auth_blueprint.route('/api/auth_ping/', methods=['GET'])
 def auth_ping():
-    response = requests.get('%s/api/ping' % os.getenv('SVG_AUTH_BASE_URI'))
+    response = requests.get('%s/api/ping' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'))
 
     return jsonify(response.json()), 200
 
@@ -79,5 +79,29 @@ def login():
             'status': 'success',
             'authTokens': generate_auth_tokens(response_data['userId'])
         }), 201
+
+    return jsonify(response_data), response.status_code
+
+
+@auth_blueprint.route('/api/users', methods=['GET'])
+def users():
+    response = requests.get('%s/api/users' % os.getenv('SVG_AUTH_BASE_URI'), json=request.get_json())
+    response_data = response.json()
+
+    return jsonify(response_data), response.status_code
+
+
+@auth_blueprint.route('/api/device_id', methods=['POST'])
+@jwt_required
+def update_device_id():
+    post_data = request.get_json()
+    user_id = get_jwt_identity()
+
+    post_data['userId'] = user_id
+
+    print(post_data)
+
+    response = requests.post('%s/api/device_id' % os.getenv('SVG_AUTH_BASE_URI'), json=post_data)
+    response_data = response.json()
 
     return jsonify(response_data), response.status_code
