@@ -20,6 +20,7 @@ services:
       - SVG_MONITORING_BASE_URI=http://svg_monitoring:5000
       - SVG_AUTH_BASE_URI=http://svg_auth:5000
       - SVG_COMPUTER_VISION_BASE_URI=http://svg_computer_vision:5000
+      - SVG_RASP_GATEWAY_BASE_URI=http://192.168.0.33:5005
     networks:
       - svg_shared
 networks:
