@@ -61,5 +61,6 @@ def confirm_pairing():
         }), 400
 
     return jsonify({
-        'success': True
+        'success': True,
+        'machineId': machine_id
     }), 201
