@@ -1,8 +1,6 @@
 import os
 
-from flask import Blueprint
-from flask import jsonify
-from flask import request
+from flask import Blueprint, jsonify, request, send_file
 
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
@@ -11,6 +9,7 @@ import requests
 
 from .utils import generate_auth_tokens
 
+import sys
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -90,6 +89,7 @@ def users():
 
     return jsonify(response_data), response.status_code
 
+
 @auth_blueprint.route('/api/get_user', methods=['GET'])
 @jwt_required
 def get_user():
@@ -115,3 +115,19 @@ def update_device_id():
     response_data = response.json()
 
     return jsonify(response_data), response.status_code
+
+
+@auth_blueprint.route('/api/get-image', methods=['GET'])
+@jwt_required
+def get_image():
+    user_id = get_jwt_identity()
+
+    responseAuth = requests.get(os.getenv('SVG_AUTH_BASE_URI') + f'/api/user/{user_id}', json=request.get_json())
+
+    response_data = responseAuth.json()
+    machine_id = response_data['machineId']
+
+    post_data = { "machine_id": machine_id }
+    response = requests.post('%s/api/get-image' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'), json=post_data)
+
+    return response.content, response.status_code
