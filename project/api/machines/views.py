@@ -66,6 +66,14 @@ def confirm_pairing():
     }), 201
 
 
+@machines_blueprint.route('/api/start_planting', methods=['POST'])
+def start_planting():
+    post_data = request.get_json()
+
+    monitoring_response = requests.post('%s/api/planting' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
+
+    return jsonify(monitoring_response.json()), monitoring_response.status_code
+
 @machines_blueprint.route('/api/update_planting_info', methods=['POST'])
 def update_planting_info():
     post_data = request.get_json()
