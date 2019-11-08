@@ -74,6 +74,14 @@ def start_planting():
 
     return jsonify(monitoring_response.json()), monitoring_response.status_code
 
+@machines_blueprint.route('/api/end_planting', methods=['POST'])
+def end_planting():
+    post_data = request.get_json()
+
+    monitoring_response = requests.post('%s/api/end_planting' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
+
+    return jsonify(monitoring_response.json()), monitoring_response.status_code
+
 @machines_blueprint.route('/api/update_planting_info', methods=['POST'])
 def update_planting_info():
     post_data = request.get_json()
