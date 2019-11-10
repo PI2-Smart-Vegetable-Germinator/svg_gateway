@@ -22,6 +22,8 @@ def update_or_create_machine():
 
     response = requests.post('%s/api/machine' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
 
+    print(response)
+    
     return jsonify(response.json()), response.status_code
 
 

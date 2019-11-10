@@ -29,11 +29,19 @@ def auth_ping():
 
 
 @auth_blueprint.route('/api/current-info/', methods=['GET'])
+@jwt_required
 def get_current_info():
-    response = requests.get('%s/api/current-info' %
-                            os.getenv('SVG_MONITORING_BASE_URI'), json=request.get_json())
 
-    return jsonify(response.json()), 200
+    user_id = get_jwt_identity()
+
+    responseAuth = requests.get(os.getenv('SVG_AUTH_BASE_URI') + f'/api/user/{user_id}', json=request.get_json())
+
+    response_data = responseAuth.json()
+    machine_id = response_data['machineId']
+
+    responseMonitoring = requests.get(os.getenv('SVG_MONITORING_BASE_URI') + f'/api/current-info/{machine_id}/', json=request.get_json())
+
+    return jsonify(responseMonitoring.json()), 200
 
 
 @auth_blueprint.route('/api/plantings-history/', methods=['GET'])
@@ -52,7 +60,7 @@ def get_plantings_history():
     return jsonify(responseMonitoring.json()), 200
 
 
-@auth_blueprint.route('/api/signup/', methods=['POST'])
+@auth_blueprint.route('/api/signup', methods=['POST'])
 def signup():
     response = requests.post(
         '%s/api/signup' % os.getenv('SVG_AUTH_BASE_URI'), json=request.get_json())
@@ -67,7 +75,7 @@ def signup():
     return jsonify(response_data), response.status_code
 
 
-@auth_blueprint.route('/api/login/', methods=['POST'])
+@auth_blueprint.route('/api/login', methods=['POST'])
 def login():
     response = requests.post(
         '%s/api/login' % os.getenv('SVG_AUTH_BASE_URI'), json=request.get_json())
