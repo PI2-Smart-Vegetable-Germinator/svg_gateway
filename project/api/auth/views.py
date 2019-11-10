@@ -14,14 +14,14 @@ import sys
 auth_blueprint = Blueprint('auth', __name__)
 
 
-@auth_blueprint.route('/api/ping/', methods=['GET'])
+@auth_blueprint.route('/api/ping', methods=['GET'])
 def ping():
     return jsonify({
         'response': 'pong!'
     }), 200
 
 
-@auth_blueprint.route('/api/auth_ping/', methods=['GET'])
+@auth_blueprint.route('/api/auth_ping', methods=['GET'])
 def auth_ping():
     response = requests.get('%s/api/ping' % os.getenv('SVG_COMPUTER_VISION_BASE_URI'))
 
@@ -44,7 +44,7 @@ def get_current_info():
     return jsonify(responseMonitoring.json()), 200
 
 
-@auth_blueprint.route('/api/plantings-history/', methods=['GET'])
+@auth_blueprint.route('/api/plantings-history', methods=['GET'])
 @jwt_required
 def get_plantings_history():
 
