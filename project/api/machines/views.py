@@ -111,6 +111,9 @@ def update_planting_info():
     }), 201
 
 
+
+# SECTION IRRIGATION --------------------------------------------------    
+
 @machines_blueprint.route('/api/start_irrigation', methods=['POST'])
 def start_irrigation():
     post_data = request.get_json()
@@ -173,6 +176,9 @@ def app_end_irrigation():
     return jsonify(monitoring_response.json()), monitoring_response.status_code
 
 
+
+# SECTION ILLUMINATION --------------------------------------------------    
+
 @machines_blueprint.route('/api/start_illumination', methods=['POST'])
 def start_illumination():
     post_data = request.get_json()
@@ -186,6 +192,17 @@ def start_illumination():
 @machines_blueprint.route('/api/app/start_illumination', methods=['POST'])
 def app_start_illumination():
     post_data = request.get_json()
+
+    rasp_response = requests.get(
+        '%s/api/app/start_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
+
+    print(rasp_response.content)
+
+    if rasp_response.status_code != 200:
+        return jsonify({
+            'success': False,
+            'message': 'Illumination error'
+        }), 400
 
     monitoring_response = requests.post(
         '%s/api/start_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
@@ -206,6 +223,17 @@ def end_illumination():
 @machines_blueprint.route('/api/app/end_illumination', methods=['POST'])
 def app_end_illumination():
     post_data = request.get_json()
+
+    rasp_response = requests.get(
+        '%s/api/app/end_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
+
+    print(rasp_response.content)
+
+    if rasp_response.status_code != 200:
+        return jsonify({
+            'success': False,
+            'message': 'Illumination error'
+        }), 400
 
     monitoring_response = requests.post(
         '%s/api/end_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
