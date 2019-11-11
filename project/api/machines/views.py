@@ -134,3 +134,21 @@ def app_end_irrigation():
     monitoring_response = requests.post('%s/api/end_irrigation' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
 
     return jsonify(monitoring_response.json()), monitoring_response.status_code
+
+
+@machines_blueprint.route('/api/start_illumination', methods=['POST'])
+def start_illumination():
+    post_data = request.get_json()
+
+    monitoring_response = requests.post('%s/api/start_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
+
+    return jsonify(monitoring_response.json()), monitoring_response.status_code
+
+
+@machines_blueprint.route('/api/end_illumination', methods=['POST'])
+def end_illumination():
+    post_data = request.get_json()
+
+    monitoring_response = requests.post('%s/api/end_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
+
+    return jsonify(monitoring_response.json()), monitoring_response.status_code
