@@ -77,6 +77,7 @@ def login():
     if response.status_code == 201:
         return jsonify({
             'status': 'success',
+            'machineId': response_data.get('machineId'),
             'authTokens': generate_auth_tokens(response_data['userId'])
         }), 201
 
