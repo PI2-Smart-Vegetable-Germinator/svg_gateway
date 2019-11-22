@@ -179,8 +179,8 @@ def app_end_irrigation():
 
 # SECTION ILLUMINATION --------------------------------------------------    
 
-@machines_blueprint.route('/api/start_illumination', methods=['POST'])
-def start_illumination():
+@machines_blueprint.route('/api/switch_illumination', methods=['POST'])
+def switch_illumination():
     post_data = request.get_json()
 
     monitoring_response = requests.post(
@@ -189,12 +189,12 @@ def start_illumination():
     return jsonify(monitoring_response.json()), monitoring_response.status_code
 
 
-@machines_blueprint.route('/api/app/start_illumination', methods=['POST'])
-def app_start_illumination():
+@machines_blueprint.route('/api/app/switch_illumination', methods=['POST'])
+def app_switch_illumination():
     post_data = request.get_json()
 
     rasp_response = requests.get(
-        '%s/api/app/start_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
+        '%s/api/app/switch_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
 
     print(rasp_response.content)
 
@@ -204,38 +204,4 @@ def app_start_illumination():
             'message': 'Illumination error'
         }), 400
 
-    monitoring_response = requests.post(
-        '%s/api/start_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
-
-    return jsonify(monitoring_response.json()), monitoring_response.status_code
-
-
-@machines_blueprint.route('/api/end_illumination', methods=['POST'])
-def end_illumination():
-    post_data = request.get_json()
-
-    monitoring_response = requests.post(
-        '%s/api/end_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
-
-    return jsonify(monitoring_response.json()), monitoring_response.status_code
-
-
-@machines_blueprint.route('/api/app/end_illumination', methods=['POST'])
-def app_end_illumination():
-    post_data = request.get_json()
-
-    rasp_response = requests.get(
-        '%s/api/app/end_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
-
-    print(rasp_response.content)
-
-    if rasp_response.status_code != 200:
-        return jsonify({
-            'success': False,
-            'message': 'Illumination error'
-        }), 400
-
-    monitoring_response = requests.post(
-        '%s/api/end_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
-
-    return jsonify(monitoring_response.json()), monitoring_response.status_code
+    return jsonify(rasp_response.json()), rasp_response.status_code
