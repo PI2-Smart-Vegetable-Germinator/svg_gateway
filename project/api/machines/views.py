@@ -203,17 +203,28 @@ def switch_illumination():
 def app_switch_illumination():
     post_data = request.get_json()
 
-    # rasp_response = requests.get(
-    #     '%s/api/app/switch_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
+    rasp_response = requests.get(
+        '%s/api/app/switch_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
 
-    # print(rasp_response.content)
+    if rasp_response.status_code != 200:
+        return jsonify({
+            'success': False,
+            'message': 'Illumination error'
+        }), 400
 
-    # if rasp_response.status_code != 200:
-    #     return jsonify({
-    #         'success': False,
-    #         'message': 'Illumination error'
-    #     }), 400
+    rasp_response_data = rasp_response.json()
+    currently_backlit = rasp_response_data['currently_backlit']
 
-    # return jsonify(rasp_response.json()), rasp_response.status_code
+    if currently_backlit:
+        print('start_illumination')
+        monitoring_response = requests.post(
+            '%s/api/start_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
 
-    return jsonify({'success': True, 'app_switch_illumination': 'testinho-top'}), 200
+        return jsonify(monitoring_response.json()), monitoring_response.status_code
+
+    else:
+        print('end_illumination')
+        monitoring_response = requests.post(
+            '%s/api/end_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
+
+        return jsonify(monitoring_response.json()), monitoring_response.status_code
