@@ -95,6 +95,8 @@ def end_planting():
 
 @machines_blueprint.route('/api/update_planting_info', methods=['POST'])
 def update_planting_info():
+
+    print(request.get_json())
     post_data = request.get_json()
 
     monitoring_response = requests.post(
@@ -111,8 +113,7 @@ def update_planting_info():
     }), 201
 
 
-
-# SECTION IRRIGATION --------------------------------------------------    
+# SECTION IRRIGATION --------------------------------------------------
 
 @machines_blueprint.route('/api/start_irrigation', methods=['POST'])
 def start_irrigation():
@@ -176,32 +177,43 @@ def app_end_irrigation():
     return jsonify(monitoring_response.json()), monitoring_response.status_code
 
 
-
-# SECTION ILLUMINATION --------------------------------------------------    
+# SECTION ILLUMINATION --------------------------------------------------
 
 @machines_blueprint.route('/api/switch_illumination', methods=['POST'])
 def switch_illumination():
     post_data = request.get_json()
+    currently_backlit = post_data['currently_backlit']
 
-    monitoring_response = requests.post(
-        '%s/api/start_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
+    if currently_backlit:
+        # print('start_illumination')
+        monitoring_response = requests.post(
+            '%s/api/start_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
 
-    return jsonify(monitoring_response.json()), monitoring_response.status_code
+        return jsonify(monitoring_response.json()), monitoring_response.status_code
+
+    else:
+        # print('end_illumination')
+        monitoring_response = requests.post(
+            '%s/api/end_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
+
+        return jsonify(monitoring_response.json()), monitoring_response.status_code
 
 
 @machines_blueprint.route('/api/app/switch_illumination', methods=['POST'])
 def app_switch_illumination():
     post_data = request.get_json()
 
-    rasp_response = requests.get(
-        '%s/api/app/switch_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
+    # rasp_response = requests.get(
+    #     '%s/api/app/switch_illumination' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
 
-    print(rasp_response.content)
+    # print(rasp_response.content)
 
-    if rasp_response.status_code != 200:
-        return jsonify({
-            'success': False,
-            'message': 'Illumination error'
-        }), 400
+    # if rasp_response.status_code != 200:
+    #     return jsonify({
+    #         'success': False,
+    #         'message': 'Illumination error'
+    #     }), 400
 
-    return jsonify(rasp_response.json()), rasp_response.status_code
+    # return jsonify(rasp_response.json()), rasp_response.status_code
+
+    return jsonify({'success': True, 'app_switch_illumination': 'testinho-top'}), 200

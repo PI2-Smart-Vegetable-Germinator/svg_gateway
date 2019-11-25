@@ -28,7 +28,7 @@ def auth_ping():
     return jsonify(response.json()), 200
 
 
-@auth_blueprint.route('/api/current-info/', methods=['GET'])
+@auth_blueprint.route('/api/current-info', methods=['GET'])
 @jwt_required
 def get_current_info():
 
