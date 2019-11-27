@@ -8,10 +8,20 @@ from flask_jwt_extended import get_jwt_identity
 
 import os
 import requests
+from requests.exceptions import RequestException
 import json
 
 machines_blueprint = Blueprint('machines', __name__)
 CORS(machines_blueprint)
+
+
+@machines_blueprint.route('/api/ping_rasp')
+def ping_rasp():
+    try:
+        requests.get('%s/api/ping' % os.getenv('SVG_RASP_GATEWAY_BASE_URI'))
+        return jsonify({'success': True}), 200
+    except RequestException:
+        return jsonify({'success': False}), 503
 
 
 @machines_blueprint.route('/api/machine', methods=['POST'])
