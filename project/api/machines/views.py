@@ -176,6 +176,8 @@ def app_switch_smart_irrigation():
     machine_id = response_data['machineId']
 
     responseMonitoring = requests.post(os.getenv('SVG_MONITORING_BASE_URI') + f'/api/switch_smart_irrigation/{machine_id}', )
+    monitoringJson = responseMonitoring.json()
+    responseRaspgate = requests.post(os.getenv('SVG_RASP_GATEWAY_BASE_URI') + f'/api/toggle_smart_irrigation', json={'smartIrrigationEnabled': monitoringJson.get('smart_irrigation_status')})
 
     return jsonify(responseMonitoring.json()), 200
     
