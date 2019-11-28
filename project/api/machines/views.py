@@ -165,6 +165,35 @@ def end_irrigation():
     return jsonify(monitoring_response.json()), monitoring_response.status_code
 
 
+@machines_blueprint.route('/api/app/switch_smart_irrigation',  methods=['POST'])
+@jwt_required
+def app_switch_smart_irrigation():
+    user_id = get_jwt_identity()
+
+    responseAuth = requests.get(os.getenv('SVG_AUTH_BASE_URI') + f'/api/user/{user_id}', )
+
+    response_data = responseAuth.json()
+    machine_id = response_data['machineId']
+
+    responseMonitoring = requests.post(os.getenv('SVG_MONITORING_BASE_URI') + f'/api/switch_smart_irrigation/{machine_id}', )
+
+    return jsonify(responseMonitoring.json()), 200
+    
+
+@machines_blueprint.route('/api/app/get_smart_irrigation_status',  methods=['GET'])
+@jwt_required
+def get_smart_irrigation_status():
+    user_id = get_jwt_identity()
+
+    responseAuth = requests.get(os.getenv('SVG_AUTH_BASE_URI') + f'/api/user/{user_id}', )
+
+    response_data = responseAuth.json()
+    machine_id = response_data['machineId']
+
+    responseMonitoring = requests.get(os.getenv('SVG_MONITORING_BASE_URI') + f'/api/get_smart_irrigation_status/{machine_id}', )
+
+    return jsonify(responseMonitoring.json()), 200
+
 # SECTION ILLUMINATION --------------------------------------------------
 
 @machines_blueprint.route('/api/switch_illumination', methods=['POST'])
@@ -204,7 +233,7 @@ def app_switch_illumination():
     currently_backlit = rasp_response_data['currently_backlit']
 
     if currently_backlit:
-        print('start_illumination')
+        # print('start_illumination')
         monitoring_response = requests.post(
             '%s/api/start_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
 
@@ -216,3 +245,4 @@ def app_switch_illumination():
             '%s/api/end_illumination' % os.getenv('SVG_MONITORING_BASE_URI'), json=post_data)
 
         return jsonify(monitoring_response.json()), monitoring_response.status_code
+
