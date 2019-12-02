@@ -135,7 +135,7 @@ def get_image():
     response_data = responseAuth.json()
     machine_id = response_data['machineId']
 
-    monitor_response = requests.post('%s/api/current-info/%s' % (os.getenv('SVG_MONITORING_BASE_URI'), machine_id))
+    monitor_response = requests.get('%s/api/current-info/%s' % (os.getenv('SVG_MONITORING_BASE_URI'), machine_id))
     monitor_data = monitor_response.json()
 
     planting_id = monitor_data.get('data').get('planting_id')
